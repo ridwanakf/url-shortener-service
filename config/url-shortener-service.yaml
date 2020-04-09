@@ -1,0 +1,9 @@
+flag:
+  port: 5000
+
+database:
+  driver: "postgres"
+  address: "postgres://postgres:postgres@localhost:5432/ridwanakf-url-shortener?sslmode=disable"
+  max_conns: 3000
+  max_idle_conns: 1000
+

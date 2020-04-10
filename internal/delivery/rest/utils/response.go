@@ -17,6 +17,10 @@ type (
 		Messages    []string `json:"messages"`
 		ErrorCode   string   `json:"error_code"`
 	}
+
+	ResponseBoolean struct {
+		Status string `json:"status"`
+	}
 )
 
 func WriteResponse(w http.ResponseWriter, req *http.Request, start time.Time, status int, data interface{}, messages ...string) {

@@ -6,8 +6,8 @@ import "github.com/ridwanakf/url-shortener-service/internal/entity"
 //go:generate mockgen -destination=usecase/url_shortener_mock.go -package=usecase github.com/ridwanakf/url-shortener-service/internal ShortenerUC
 type ShortenerUC interface {
 	GetAllURL() ([]entity.URL, error)
-	CreateNewShortURL(longURL string) (string, error)                        //return shortURL
-	CreateNewCustomShortURL(shortURL string, longURL string) (string, error) //return custom shortURL if success
+	CreateNewShortURL(longURL string) (entity.URL, error)
+	CreateNewCustomShortURL(shortURL string, longURL string) (entity.URL, error)
 	UpdateShortURL(shortURL string, longURL string) error
 	GetLongURL(shortURL string) (string, error)
 	DeleteURL(shortURL string) error

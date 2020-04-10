@@ -19,11 +19,11 @@ func (u *ShortenerUsecase) GetAllURL() ([]entity.URL, error) {
 	panic("implement me!")
 }
 
-func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (string, error) {
+func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error) {
 	panic("implement me!")
 }
 
-func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL string) (string, error) {
+func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL string) (entity.URL, error) {
 	panic("implement me!")
 }
 

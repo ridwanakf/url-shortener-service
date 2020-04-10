@@ -5,7 +5,6 @@ import (
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
 )
 
-//TODO: considering trying Gorm
 type ShortenerDBRepo struct {
 	db *sql.DB
 }
@@ -20,11 +19,7 @@ func (d *ShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) CreateNewShortURL(longURL string) error {
-	panic("implement me!")
-}
-
-func (d *ShortenerDBRepo) CreateNewCustomShortURL(shortURL string, longURL string) error {
+func (d *ShortenerDBRepo) CreateNewShortURL(shortURL string, longURL string) error {
 	panic("implement me!")
 }
 
@@ -37,13 +32,5 @@ func (d *ShortenerDBRepo) GetLongURL(shortURL string) (string, error) {
 }
 
 func (d *ShortenerDBRepo) DeleteURL(shortURL string) error {
-	panic("implement me!")
-}
-
-func (d *ShortenerDBRepo) IsShortURLExist(shortURL string) (bool, error) {
-	panic("implement me!")
-}
-
-func (d *ShortenerDBRepo) IsLongURLExist(longURL string) (bool, error) {
 	panic("implement me!")
 }

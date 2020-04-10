@@ -8,7 +8,7 @@ type ShortenerUC interface {
 	GetAllURL() ([]entity.URL, error)
 	CreateNewShortURL(longURL string) (string, error)                        //return shortURL
 	CreateNewCustomShortURL(shortURL string, longURL string) (string, error) //return custom shortURL if success
-	UpdateShortURL(shortURL string, longURL string) (bool, error)            //return true if success
+	UpdateShortURL(shortURL string, longURL string) error
 	GetLongURL(shortURL string) (string, error)
-	DeleteURL(shortURL string) (bool, error)
+	DeleteURL(shortURL string) error
 }

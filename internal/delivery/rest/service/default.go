@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/ridwanakf/url-shortener-service/internal/delivery/rest/route"
+	"github.com/ridwanakf/url-shortener-service/internal/delivery/rest/utils"
 	"net/http"
 	"time"
 )
@@ -22,5 +22,5 @@ var NotFound = struct {
 
 func (h *DefaultService) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	start := time.Now()
-	route.WriteResponse(w, req, start, http.StatusNotFound, NotFound)
+	utils.WriteResponse(w, req, start, http.StatusNotFound, NotFound)
 }

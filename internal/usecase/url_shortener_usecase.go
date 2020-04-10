@@ -27,7 +27,7 @@ func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL stri
 	panic("implement me!")
 }
 
-func (u *ShortenerUsecase) UpdateShortURL(shortURL string, longURL string) (bool, error) {
+func (u *ShortenerUsecase) UpdateShortURL(shortURL string, longURL string) error {
 	panic("implement me!")
 }
 
@@ -35,6 +35,6 @@ func (u *ShortenerUsecase) GetLongURL(shortURL string) (string, error) {
 	panic("implement me!")
 }
 
-func (u *ShortenerUsecase) DeleteURL(shortURL string) (bool, error) {
+func (u *ShortenerUsecase) DeleteURL(shortURL string) error {
 	panic("implement me!")
 }

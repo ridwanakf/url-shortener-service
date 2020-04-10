@@ -14,7 +14,7 @@ import (
 
 func initRouter(router *mux.Router, svc *service.Services) {
 	router.HandleFunc("/", svc.IndexHandler).Methods("GET")
-	router.HandleFunc("/{id}", svc.RedirectHandler).Methods("GET")
+	router.HandleFunc("/{shortUrl}", svc.RedirectHandler).Methods("GET")
 	router.HandleFunc("/list/", svc.GetListDataHandler).Methods("GET")
 	router.HandleFunc("/create", svc.CreateURLHandler).Methods("POST")
 	router.HandleFunc("/update", svc.UpdateURLHandler).Methods("PUT")

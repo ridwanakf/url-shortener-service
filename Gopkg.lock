@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:7ae311278f7ccaa724de8f2cdec0a507ba3ee6dea8c77237e8157bcf64b0f28b"
+  name = "github.com/golang/mock"
+  packages = ["gomock"]
+  pruneopts = "UT"
+  revision = "3a35fb6e3e18b9dbfee291262260dee7372d2a92"
+  version = "v1.4.3"
+
+[[projects]]
   digest = "1:006c7bee86cb03c98cb89394a22c363da552b27259160319aa8fd27e516e7257"
   name = "github.com/google/gops"
   packages = [
@@ -61,6 +69,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/golang/mock/gomock",
     "github.com/google/gops/agent",
     "github.com/gorilla/mux",
     "github.com/lib/pq",

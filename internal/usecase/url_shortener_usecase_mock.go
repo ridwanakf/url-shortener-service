@@ -77,6 +77,20 @@ func (mr *MockShortenerUCMockRecorder) DeleteURL(arg0 interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteURL", reflect.TypeOf((*MockShortenerUC)(nil).DeleteURL), arg0)
 }
 
+// GenerateShortURL mocks base method
+func (m *MockShortenerUC) GenerateShortURL(arg0 int) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateShortURL", arg0)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// GenerateShortURL indicates an expected call of GenerateShortURL
+func (mr *MockShortenerUCMockRecorder) GenerateShortURL(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateShortURL", reflect.TypeOf((*MockShortenerUC)(nil).GenerateShortURL), arg0)
+}
+
 // GetAllURL mocks base method
 func (m *MockShortenerUC) GetAllURL() ([]entity.URL, error) {
 	m.ctrl.T.Helper()

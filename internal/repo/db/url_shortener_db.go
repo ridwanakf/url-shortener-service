@@ -19,7 +19,7 @@ func (d *ShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) CreateNewShortURL(shortURL string, longURL string) error {
+func (d *ShortenerDBRepo) CreateNewShortURL(url entity.URL) error {
 	panic("implement me!")
 }
 
@@ -32,5 +32,9 @@ func (d *ShortenerDBRepo) GetLongURL(shortURL string) (string, error) {
 }
 
 func (d *ShortenerDBRepo) DeleteURL(shortURL string) error {
+	panic("implement me!")
+}
+
+func (d *ShortenerDBRepo) IsShortURLExist(shortURL string) bool {
 	panic("implement me!")
 }

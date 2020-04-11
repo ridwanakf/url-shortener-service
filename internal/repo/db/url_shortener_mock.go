@@ -34,17 +34,17 @@ func (m *MockShortenerDB) EXPECT() *MockShortenerDBMockRecorder {
 }
 
 // CreateNewShortURL mocks base method
-func (m *MockShortenerDB) CreateNewShortURL(arg0, arg1 string) error {
+func (m *MockShortenerDB) CreateNewShortURL(arg0 entity.URL) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewShortURL", arg0, arg1)
+	ret := m.ctrl.Call(m, "CreateNewShortURL", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateNewShortURL indicates an expected call of CreateNewShortURL
-func (mr *MockShortenerDBMockRecorder) CreateNewShortURL(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockShortenerDBMockRecorder) CreateNewShortURL(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewShortURL", reflect.TypeOf((*MockShortenerDB)(nil).CreateNewShortURL), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewShortURL", reflect.TypeOf((*MockShortenerDB)(nil).CreateNewShortURL), arg0)
 }
 
 // DeleteURL mocks base method
@@ -89,6 +89,20 @@ func (m *MockShortenerDB) GetLongURL(arg0 string) (string, error) {
 func (mr *MockShortenerDBMockRecorder) GetLongURL(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLongURL", reflect.TypeOf((*MockShortenerDB)(nil).GetLongURL), arg0)
+}
+
+// IsShortURLExist mocks base method
+func (m *MockShortenerDB) IsShortURLExist(arg0 string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsShortURLExist", arg0)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// IsShortURLExist indicates an expected call of IsShortURLExist
+func (mr *MockShortenerDBMockRecorder) IsShortURLExist(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsShortURLExist", reflect.TypeOf((*MockShortenerDB)(nil).IsShortURLExist), arg0)
 }
 
 // UpdateShortURL mocks base method

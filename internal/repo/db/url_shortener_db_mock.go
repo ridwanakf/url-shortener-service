@@ -91,6 +91,20 @@ func (mr *MockShortenerDBMockRecorder) GetLongURL(arg0 interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLongURL", reflect.TypeOf((*MockShortenerDB)(nil).GetLongURL), arg0)
 }
 
+// HasShortURLExpired mocks base method
+func (m *MockShortenerDB) HasShortURLExpired(arg0 string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "HasShortURLExpired", arg0)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// HasShortURLExpired indicates an expected call of HasShortURLExpired
+func (mr *MockShortenerDBMockRecorder) HasShortURLExpired(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HasShortURLExpired", reflect.TypeOf((*MockShortenerDB)(nil).HasShortURLExpired), arg0)
+}
+
 // IsShortURLExist mocks base method
 func (m *MockShortenerDB) IsShortURLExist(arg0 string) bool {
 	m.ctrl.T.Helper()

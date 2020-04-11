@@ -1,5 +1,7 @@
-flag:
+params:
   port: 5000
+  short_url_length: 6
+  expire_duration: 30 #days
 
 database:
   driver: "postgres"

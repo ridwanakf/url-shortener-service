@@ -38,7 +38,7 @@ func NewUrlShortenerApp() (*UrlShortenerApp, error) {
 		return nil, errors.Wrap(err, "errors invoking newRepos")
 	}
 
-	app.UseCases = newUsecases(app.Repos)
+	app.UseCases = newUsecases(app.Repos, &cfg)
 
 	return app, nil
 }

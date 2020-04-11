@@ -1,6 +1,6 @@
 package config
 
 type Config struct {
-	DB   Database `yaml:"database"`
-	Flag Flag     `yaml:"flag"`
+	DB     Database `yaml:"database"`
+	Params Params   `yaml:"params"`
 }

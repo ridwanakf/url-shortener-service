@@ -38,6 +38,17 @@
   version = "v1.7.4"
 
 [[projects]]
+  digest = "1:6c41d4f998a03b6604227ccad36edaed6126c397e5d78709ef4814a1145a6757"
+  name = "github.com/jmoiron/sqlx"
+  packages = [
+    ".",
+    "reflectx",
+  ]
+  pruneopts = "UT"
+  revision = "d161d7a76b5661016ad0b085869f77fd410f3e6a"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   digest = "1:f433da6fbabb0bd1bd730fd340782015c644123d02eb78c20c69ce03352daad1"
   name = "github.com/kardianos/osext"
@@ -96,6 +107,7 @@
     "github.com/golang/mock/gomock",
     "github.com/google/gops/agent",
     "github.com/gorilla/mux",
+    "github.com/jmoiron/sqlx",
     "github.com/lib/pq",
     "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",

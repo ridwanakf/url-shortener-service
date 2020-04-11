@@ -1,7 +1,7 @@
 package app
 
 import (
-	"database/sql"
+	"github.com/jmoiron/sqlx"
 	"github.com/ridwanakf/url-shortener-service/internal"
 	db2 "github.com/ridwanakf/url-shortener-service/internal/repo/db"
 )
@@ -10,9 +10,9 @@ type Repos struct {
 	ShortenerDB internal.ShortenerDB
 }
 
-func newRepos(db *sql.DB) (*Repos, error) {
+func newRepos(db *sqlx.DB) (*Repos, error) {
 	r := &Repos{
-		ShortenerDB: db2.NewShortenerDB(db),
+		ShortenerDB: db2.NewShortenerDBRepo(db),
 	}
 
 	return r, nil

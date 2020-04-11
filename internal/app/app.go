@@ -1,10 +1,9 @@
 package app
 
 import (
-	"context"
-	"database/sql"
 	"os"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/ridwanakf/url-shortener-service/constant"
@@ -70,21 +69,15 @@ func readConfig(cfgPath string) (config.Config, error) {
 	return cfg, nil
 }
 
-func initDB(cfg config.Config) (*sql.DB, error) {
-
+func initDB(cfg config.Config) (*sqlx.DB, error) {
 	dbAddress := os.Getenv("DATABASE_URL")
 	if dbAddress == "" {
 		dbAddress = cfg.DB.Address
 	}
 
-	// Initialize SQL DB
-	db, err := sql.Open(cfg.DB.Driver, dbAddress)
+	// Connect SQL DB
+	db, err := sqlx.Connect(cfg.DB.Driver, dbAddress)
 	if err != nil {
-		return nil, err
-	}
-
-	// Check if db connected
-	if err = db.PingContext(context.Background()); err != nil {
 		return nil, err
 	}
 

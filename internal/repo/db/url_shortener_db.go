@@ -1,40 +1,40 @@
 package db
 
 import (
-	"database/sql"
+	"github.com/jmoiron/sqlx"
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
 )
 
-type ShortenerDB struct {
-	db *sql.DB
+type ShortenerDBRepo struct {
+	db *sqlx.DB
 }
 
-func NewShortenerDB(db *sql.DB) *ShortenerDB {
-	return &ShortenerDB{
+func NewShortenerDBRepo(db *sqlx.DB) *ShortenerDBRepo {
+	return &ShortenerDBRepo{
 		db: db,
 	}
 }
 
-func (d *ShortenerDB) GetAllURL() ([]entity.URL, error) {
+func (d *ShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
 	panic("implement me!")
 }
 
-func (d *ShortenerDB) CreateNewShortURL(url entity.URL) error {
+func (d *ShortenerDBRepo) CreateNewShortURL(url entity.URL) error {
 	panic("implement me!")
 }
 
-func (d *ShortenerDB) UpdateShortURL(shortURL string, longURL string) error {
+func (d *ShortenerDBRepo) UpdateShortURL(shortURL string, longURL string) error {
 	panic("implement me!")
 }
 
-func (d *ShortenerDB) GetLongURL(shortURL string) (string, error) {
+func (d *ShortenerDBRepo) GetLongURL(shortURL string) (string, error) {
 	panic("implement me!")
 }
 
-func (d *ShortenerDB) DeleteURL(shortURL string) error {
+func (d *ShortenerDBRepo) DeleteURL(shortURL string) error {
 	panic("implement me!")
 }
 
-func (d *ShortenerDB) IsShortURLExist(shortURL string) bool {
+func (d *ShortenerDBRepo) IsShortURLExist(shortURL string) bool {
 	panic("implement me!")
 }

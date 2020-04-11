@@ -25,7 +25,7 @@ func initRouter(router *mux.Router, svc *service.Services) {
 func Start(app *app.UrlShortenerApp) {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = app.Cfg.Flag.Port
+		port = app.Cfg.Params.Port
 	}
 
 	svc := service.GetServices(app)
@@ -37,5 +37,5 @@ func Start(app *app.UrlShortenerApp) {
 	initRouter(router, svc)
 
 	fmt.Println("Apps served on :" + port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":" + port), router))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":"+port), router))
 }

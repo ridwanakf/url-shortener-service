@@ -12,4 +12,5 @@ type ShortenerDB interface {
 	DeleteURL(shortURL string) error
 
 	IsShortURLExist(shortURL string) bool
+	HasShortURLExpired(shortURL string) bool
 }

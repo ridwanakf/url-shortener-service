@@ -12,7 +12,7 @@ type Repos struct {
 
 func newRepos(db *sql.DB) (*Repos, error) {
 	r := &Repos{
-		ShortenerDB: db2.NewShortenerDBRepo(db),
+		ShortenerDB: db2.NewShortenerDB(db),
 	}
 
 	return r, nil

@@ -5,36 +5,36 @@ import (
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
 )
 
-type ShortenerDBRepo struct {
+type ShortenerDB struct {
 	db *sql.DB
 }
 
-func NewShortenerDBRepo(db *sql.DB) *ShortenerDBRepo {
-	return &ShortenerDBRepo{
+func NewShortenerDB(db *sql.DB) *ShortenerDB {
+	return &ShortenerDB{
 		db: db,
 	}
 }
 
-func (d *ShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
+func (d *ShortenerDB) GetAllURL() ([]entity.URL, error) {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) CreateNewShortURL(url entity.URL) error {
+func (d *ShortenerDB) CreateNewShortURL(url entity.URL) error {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) UpdateShortURL(shortURL string, longURL string) error {
+func (d *ShortenerDB) UpdateShortURL(shortURL string, longURL string) error {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) GetLongURL(shortURL string) (string, error) {
+func (d *ShortenerDB) GetLongURL(shortURL string) (string, error) {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) DeleteURL(shortURL string) error {
+func (d *ShortenerDB) DeleteURL(shortURL string) error {
 	panic("implement me!")
 }
 
-func (d *ShortenerDBRepo) IsShortURLExist(shortURL string) bool {
+func (d *ShortenerDB) IsShortURLExist(shortURL string) bool {
 	panic("implement me!")
 }

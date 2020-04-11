@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"github.com/ridwanakf/url-shortener-service/internal"
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
 	"math/rand"
@@ -56,6 +56,10 @@ func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error)
 }
 
 func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL string) (entity.URL, error) {
+	if u.db.IsShortURLExist(shortURL) {
+		return entity.URL{}, errors.New("URL has already existed")
+	}
+
 	url := entity.URL{
 		ShortURL:  shortURL,
 		LongURL:   longURL,

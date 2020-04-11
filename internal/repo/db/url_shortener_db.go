@@ -38,3 +38,7 @@ func (d *ShortenerDBRepo) DeleteURL(shortURL string) error {
 func (d *ShortenerDBRepo) IsShortURLExist(shortURL string) bool {
 	panic("implement me!")
 }
+
+func (d *ShortenerDB) HasShortURLExpired(shortURL string) bool {
+	panic("implement me!")
+}

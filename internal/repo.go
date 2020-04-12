@@ -1,10 +1,12 @@
 package internal
 
-import "github.com/ridwanakf/url-shortener-service/internal/entity"
+import (
+	"github.com/ridwanakf/url-shortener-service/internal/entity"
+)
 
-// ShortenerDB contains repo for all URL Shortener DB
-//go:generate mockgen -destination=repo/db/url_shortener_db_mock.go -package=db github.com/ridwanakf/url-shortener-service/internal ShortenerDB
-type ShortenerDB interface {
+// ShortenerDBRepo contains repo for all URL Shortener DB
+//go:generate mockgen -destination=repo/db/url_shortener_db_mock.go -package=db github.com/ridwanakf/url-shortener-service/internal ShortenerDBRepo
+type ShortenerDBRepo interface {
 	GetAllURL() ([]entity.URL, error)
 	GetLongURL(shortURL string) (string, error)
 	CreateNewShortURL(url entity.URL) error

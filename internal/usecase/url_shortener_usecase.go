@@ -9,12 +9,12 @@ import (
 )
 
 type ShortenerUsecase struct {
-	db             internal.ShortenerDB
+	db             internal.ShortenerDBRepo
 	shortUrlLength int
 	expireDuration int
 }
 
-func NewShortenerUsecase(db internal.ShortenerDB, shortUrlLength int, expireDuration int) *ShortenerUsecase {
+func NewShortenerUsecase(db internal.ShortenerDBRepo, shortUrlLength int, expireDuration int) *ShortenerUsecase {
 	return &ShortenerUsecase{
 		db:             db,
 		shortUrlLength: shortUrlLength,
@@ -47,7 +47,7 @@ func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error)
 		ShortURL:  shortURL,
 		LongURL:   longURL,
 		CreatedAt: time.Now(),
-		ExpireAt:  time.Now().Add(time.Hour * 12 * time.Duration(u.expireDuration)),
+		ExpireAt:  time.Now().Add(time.Hour * 24 * time.Duration(u.expireDuration)),
 		CreatedBy: "", //TODO: using ID if auth is implemented
 	}
 
@@ -67,7 +67,7 @@ func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL stri
 		ShortURL:  shortURL,
 		LongURL:   longURL,
 		CreatedAt: time.Now(),
-		ExpireAt:  time.Now().Add(time.Hour * 12 * time.Duration(u.expireDuration)),
+		ExpireAt:  time.Now().Add(time.Hour * 24 * time.Duration(u.expireDuration)),
 		CreatedBy: "", //TODO: using ID if auth is implemented
 	}
 
@@ -96,7 +96,7 @@ func (u *ShortenerUsecase) GetLongURL(shortURL string) (string, error) {
 	}
 
 	if u.db.HasShortURLExpired(shortURL) {
-		if err := u.DeleteURL(shortURL); err != nil {
+		if err := u.db.DeleteURL(shortURL); err != nil {
 			return "", errors.New("URL has expired! but failed to delete it")
 		}
 		return "", errors.New("URL has expired!")

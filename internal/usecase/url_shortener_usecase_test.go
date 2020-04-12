@@ -33,7 +33,7 @@ func TestNewShortenerUsecase(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		repoDB := db.NewMockShortenerDB(ctrl)
+		repoDB := db.NewMockShortenerDBRepo(ctrl)
 
 		got := NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 		assert.NotNil(t, got)
@@ -44,12 +44,12 @@ func TestNewShortenerUsecase(t *testing.T) {
 func TestShortenerUsecase_CreateNewCustomShortURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {
@@ -103,12 +103,12 @@ func TestShortenerUsecase_CreateNewCustomShortURL(t *testing.T) {
 func TestShortenerUsecase_CreateNewShortURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {
@@ -154,12 +154,12 @@ func TestShortenerUsecase_CreateNewShortURL(t *testing.T) {
 func TestShortenerUsecase_DeleteURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {
@@ -208,12 +208,12 @@ func TestShortenerUsecase_DeleteURL(t *testing.T) {
 func TestShortenerUsecase_GenerateShortURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {
@@ -233,12 +233,12 @@ func TestShortenerUsecase_GenerateShortURL(t *testing.T) {
 func TestShortenerUsecase_GetAllURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {
@@ -278,12 +278,12 @@ func TestShortenerUsecase_GetAllURL(t *testing.T) {
 func TestShortenerUsecase_GetLongURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {
@@ -309,7 +309,6 @@ func TestShortenerUsecase_GetLongURL(t *testing.T) {
 
 		repoDB.EXPECT().IsShortURLExist(gomock.Any()).Return(true)
 		repoDB.EXPECT().HasShortURLExpired(gomock.Any()).Return(true)
-		repoDB.EXPECT().IsShortURLExist(gomock.Any()).Return(true)
 		repoDB.EXPECT().DeleteURL(gomock.Any()).Return(nil)
 
 		got, err := unit.GetLongURL(urlInputTest.ShortURL)
@@ -325,7 +324,6 @@ func TestShortenerUsecase_GetLongURL(t *testing.T) {
 
 		repoDB.EXPECT().IsShortURLExist(gomock.Any()).Return(true)
 		repoDB.EXPECT().HasShortURLExpired(gomock.Any()).Return(true)
-		repoDB.EXPECT().IsShortURLExist(gomock.Any()).Return(true)
 		repoDB.EXPECT().DeleteURL(gomock.Any()).Return(errors.New("there is something error"))
 
 		got, err := unit.GetLongURL(urlInputTest.ShortURL)
@@ -370,12 +368,12 @@ func TestShortenerUsecase_GetLongURL(t *testing.T) {
 func TestShortenerUsecase_UpdateShortURL(t *testing.T) {
 	var (
 		ctrl   *gomock.Controller
-		repoDB *db.MockShortenerDB
+		repoDB *db.MockShortenerDBRepo
 		unit   *ShortenerUsecase
 	)
 	begin := func(t *testing.T) {
 		ctrl = gomock.NewController(t)
-		repoDB = db.NewMockShortenerDB(ctrl)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
 		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
 	}
 	finish := func() {

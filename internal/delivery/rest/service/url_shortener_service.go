@@ -36,7 +36,7 @@ func (s *ShortenerService) RedirectHandler(w http.ResponseWriter, r *http.Reques
 	longURL, err := s.uc.GetLongURL(shortURL)
 	if err != nil {
 		//or redirect to main page
-		utils.WriteResponse(w, r, start, http.StatusNotFound, NotFound)
+		utils.WriteResponse(w, r, start, http.StatusNotFound, NotFound, err.Error())
 		return
 	}
 	http.Redirect(w, r, longURL, http.StatusMovedPermanently)

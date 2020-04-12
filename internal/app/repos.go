@@ -7,7 +7,7 @@ import (
 )
 
 type Repos struct {
-	ShortenerDB internal.ShortenerDB
+	ShortenerDB internal.ShortenerDBRepo
 }
 
 func newRepos(db *sqlx.DB) (*Repos, error) {

@@ -1,11 +1,13 @@
 package usecase
 
 import (
+	"math/rand"
+	"net/url"
+	"time"
+
 	"github.com/pkg/errors"
 	"github.com/ridwanakf/url-shortener-service/internal"
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
-	"math/rand"
-	"time"
 )
 
 type ShortenerUsecase struct {
@@ -34,6 +36,11 @@ func (u *ShortenerUsecase) GetAllURL() ([]entity.URL, error) {
 }
 
 func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error) {
+	longURL, err := u.IsValidURL(longURL)
+	if err != nil {
+		return entity.URL{}, err
+	}
+
 	shortURL := u.GenerateShortURL(u.shortUrlLength) //TODO: move shorturl length to config
 	for {
 		if !u.db.IsShortURLExist(shortURL) {
@@ -43,7 +50,7 @@ func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error)
 		}
 	}
 
-	url := entity.URL{
+	URL := entity.URL{
 		ShortURL:  shortURL,
 		LongURL:   longURL,
 		CreatedAt: time.Now(),
@@ -51,19 +58,24 @@ func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error)
 		CreatedBy: "", //TODO: using ID if auth is implemented
 	}
 
-	if err := u.db.CreateNewShortURL(url); err != nil {
+	if err := u.db.CreateNewShortURL(URL); err != nil {
 		return entity.URL{}, err
 	}
 
-	return url, nil
+	return URL, nil
 }
 
 func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL string) (entity.URL, error) {
+	longURL, err := u.IsValidURL(longURL)
+	if err != nil {
+		return entity.URL{}, err
+	}
+
 	if u.db.IsShortURLExist(shortURL) {
 		return entity.URL{}, errors.New("URL has already existed")
 	}
 
-	url := entity.URL{
+	URL := entity.URL{
 		ShortURL:  shortURL,
 		LongURL:   longURL,
 		CreatedAt: time.Now(),
@@ -71,11 +83,11 @@ func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL stri
 		CreatedBy: "", //TODO: using ID if auth is implemented
 	}
 
-	if err := u.db.CreateNewShortURL(url); err != nil {
+	if err := u.db.CreateNewShortURL(URL); err != nil {
 		return entity.URL{}, err
 	}
 
-	return url, nil
+	return URL, nil
 }
 
 func (u *ShortenerUsecase) UpdateShortURL(shortURL string, longURL string) error {
@@ -131,4 +143,22 @@ func (u *ShortenerUsecase) GenerateShortURL(length int) string {
 		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
 	}
 	return string(b)
+}
+
+func (u *ShortenerUsecase) IsValidURL(input string) (string, error) {
+	uri, err := url.Parse(input)
+	if err != nil {
+		return "", err
+	}
+
+	switch uri.Scheme {
+	case "http":
+	case "https":
+	case "":
+		uri.Scheme = "http"
+	default:
+		return "", errors.New("Invalid scheme")
+	}
+
+	return uri.String(), nil
 }

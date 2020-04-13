@@ -13,4 +13,5 @@ type ShortenerUC interface {
 	DeleteURL(shortURL string) error
 
 	GenerateShortURL(length int) string
+	IsValidURL(url string) (string, error)
 }

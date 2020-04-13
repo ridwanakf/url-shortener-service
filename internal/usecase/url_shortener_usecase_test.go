@@ -14,7 +14,7 @@ import (
 
 var urlInputTest = entity.URL{
 	ShortURL:  "aBcDe",
-	LongURL:   "http://www.google.com",
+	LongURL:   "www.google.com",
 	CreatedAt: time.Now(),
 	CreatedBy: "anonymous",
 }
@@ -95,7 +95,7 @@ func TestShortenerUsecase_CreateNewCustomShortURL(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NoError(t, err)
 		assert.NotEqual(t, entity.URL{}, got)
-		assert.Equal(t, urlInputTest.LongURL, got.LongURL)
+		assert.Equal(t, "http://"+urlInputTest.LongURL, got.LongURL)
 		assert.Equal(t, urlInputTest.ShortURL, got.ShortURL)
 	})
 }
@@ -147,7 +147,7 @@ func TestShortenerUsecase_CreateNewShortURL(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NoError(t, err)
 		assert.NotEqual(t, entity.URL{}, got)
-		assert.Equal(t, urlInputTest.LongURL, got.LongURL)
+		assert.Equal(t, "http://"+urlInputTest.LongURL, got.LongURL)
 	})
 }
 
@@ -416,5 +416,32 @@ func TestShortenerUsecase_UpdateShortURL(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.NoError(t, err)
+	})
+}
+
+func TestShortenerUsecase_IsValidURL(t *testing.T) {
+	var (
+		ctrl   *gomock.Controller
+		repoDB *db.MockShortenerDBRepo
+		unit   *ShortenerUsecase
+	)
+	begin := func(t *testing.T) {
+		ctrl = gomock.NewController(t)
+		repoDB = db.NewMockShortenerDBRepo(ctrl)
+		unit = NewShortenerUsecase(repoDB, params.ShortUrlLength, params.ExpireDuration)
+	}
+	finish := func() {
+		ctrl.Finish()
+	}
+
+	t.Run("if url doesnt have http or https schema, add it", func(t *testing.T) {
+		begin(t)
+		defer finish()
+
+		got, err := unit.IsValidURL(urlInputTest.LongURL)
+
+		assert.NoError(t, err)
+		assert.Nil(t, err)
+		assert.Equal(t, "http://"+urlInputTest.LongURL, got)
 	})
 }

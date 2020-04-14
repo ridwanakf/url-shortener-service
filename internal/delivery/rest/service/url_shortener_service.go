@@ -52,6 +52,7 @@ func (s *ShortenerService) GetListDataHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	list = utils.ConvertBatchShortURl(r, list)
 	utils.WriteResponse(w, r, start, http.StatusOK, list, "success")
 }
 
@@ -92,7 +93,7 @@ func (s *ShortenerService) CreateURLHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	res := utils.Request{
-		ShortURL: newURL.ShortURL,
+		ShortURL: utils.ConvertShortURL(r, newURL.ShortURL),
 		LongURL:  newURL.LongURL,
 	}
 

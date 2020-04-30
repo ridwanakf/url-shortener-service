@@ -4,15 +4,18 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/ridwanakf/url-shortener-service/internal"
 	db2 "github.com/ridwanakf/url-shortener-service/internal/repo/db"
+	"github.com/ridwanakf/url-shortener-service/internal/repo/redis_cache"
 )
 
 type Repos struct {
-	ShortenerDB internal.ShortenerDBRepo
+	ShortenerDB    internal.ShortenerDBRepo
+	ShortenerCache internal.ShortenerCacheRepo
 }
 
-func newRepos(db *sqlx.DB) (*Repos, error) {
+func newRepos(bridges *Bridges, db *sqlx.DB) (*Repos, error) {
 	r := &Repos{
-		ShortenerDB: db2.NewShortenerDBRepo(db),
+		ShortenerDB:    db2.NewShortenerDBRepo(db),
+		ShortenerCache: redis_cache.NewShortenerCacheRepo(bridges.Redis, bridges.Json),
 	}
 
 	return r, nil

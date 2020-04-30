@@ -12,6 +12,7 @@ import (
 )
 
 type UrlShortenerApp struct {
+	Bridges  *Bridges
 	Repos    *Repos
 	UseCases *Usecases
 	Cfg      config.Config
@@ -32,7 +33,9 @@ func NewUrlShortenerApp() (*UrlShortenerApp, error) {
 
 	app.Cfg = cfg
 
-	app.Repos, err = newRepos(db)
+	app.Bridges, err = newBridges(&cfg)
+
+	app.Repos, err = newRepos(app.Bridges, db)
 	if err != nil {
 		return nil, errors.Wrap(err, "errors invoking newRepos")
 	}
@@ -47,6 +50,7 @@ func (a *UrlShortenerApp) Close() []error {
 
 	errs = append(errs, a.Repos.Close()...)
 	errs = append(errs, a.UseCases.Close()...)
+	errs = append(errs, a.Bridges.Close()...)
 
 	return errs
 }

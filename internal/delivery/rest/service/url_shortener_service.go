@@ -52,7 +52,7 @@ func (s *ShortenerService) GetListDataHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	list = utils.ConvertBatchShortURl(r, list)
+	list = utils.ConvertBatchShortURL(r, list)
 	utils.WriteResponse(w, r, start, http.StatusOK, list, "success")
 }
 

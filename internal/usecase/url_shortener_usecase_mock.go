@@ -121,6 +121,21 @@ func (mr *MockShortenerUCMockRecorder) GetLongURL(arg0 interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLongURL", reflect.TypeOf((*MockShortenerUC)(nil).GetLongURL), arg0)
 }
 
+// IsValidURL mocks base method
+func (m *MockShortenerUC) IsValidURL(arg0 string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsValidURL", arg0)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsValidURL indicates an expected call of IsValidURL
+func (mr *MockShortenerUCMockRecorder) IsValidURL(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsValidURL", reflect.TypeOf((*MockShortenerUC)(nil).IsValidURL), arg0)
+}
+
 // UpdateShortURL mocks base method
 func (m *MockShortenerUC) UpdateShortURL(arg0, arg1 string) error {
 	m.ctrl.T.Helper()

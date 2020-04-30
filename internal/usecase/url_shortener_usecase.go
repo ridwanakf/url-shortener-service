@@ -41,7 +41,7 @@ func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error)
 		return entity.URL{}, err
 	}
 
-	shortURL := u.GenerateShortURL(u.shortUrlLength) //TODO: move shorturl length to config
+	shortURL := u.GenerateShortURL(u.shortUrlLength)
 	for {
 		if !u.db.IsShortURLExist(shortURL) {
 			break

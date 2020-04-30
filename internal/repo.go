@@ -16,3 +16,11 @@ type ShortenerDBRepo interface {
 	IsShortURLExist(shortURL string) bool
 	HasShortURLExpired(shortURL string) bool
 }
+
+// ShortenerCacheRepo contains repo for all URL Shortener Cache
+//go:generate mockgen -destination=repo/redis_cache/url_shortener_redis_mock.go -package=redis_cache github.com/ridwanakf/url-shortener-service/internal ShortenerCacheRepo
+type ShortenerCacheRepo interface {
+	GetLongURL(shortURL string) (string, error)
+	IsShortURLExist(shortURL string) (bool, error)
+	DeleteURL(shortURL string) (bool, error)
+}

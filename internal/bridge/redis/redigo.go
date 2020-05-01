@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"github.com/ridwanakf/url-shortener-service/internal/app/config"
 	"log"
 	"strings"
 	"time"
@@ -14,16 +15,16 @@ type redigo struct {
 }
 
 // NewRedigo constructs a new Redis-client using Redigo library
-func NewRedigo(address string) *redigo {
+func NewRedigo(address string, config config.Redis) *redigo {
 	// Reference: https://github.com/pete911/examples-redigo
 	pool := &redis.Pool{
 
-		MaxIdle:     3,
-		MaxActive:   50,
-		IdleTimeout: 240 * time.Second,
+		MaxIdle:     config.MaxIdle,
+		MaxActive:   config.MaxActive,
+		IdleTimeout: time.Duration(config.Timeout) * time.Second,
 
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", address)
+			c, err := redis.DialURL(address)
 			if err != nil {
 				return nil, err
 			}

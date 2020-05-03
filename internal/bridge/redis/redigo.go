@@ -15,16 +15,16 @@ type redigo struct {
 }
 
 // NewRedigo constructs a new Redis-client using Redigo library
-func NewRedigo(address string, config config.Redis) *redigo {
+func NewRedigo(redisConfig config.Redis) *redigo {
 	// Reference: https://github.com/pete911/examples-redigo
 	pool := &redis.Pool{
 
-		MaxIdle:     config.MaxIdle,
-		MaxActive:   config.MaxActive,
-		IdleTimeout: time.Duration(config.Timeout) * time.Second,
+		MaxIdle:     redisConfig.MaxIdle,
+		MaxActive:   redisConfig.MaxActive,
+		IdleTimeout: time.Duration(redisConfig.Timeout) * time.Second,
 
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.DialURL(address)
+			c, err := redis.DialURL(redisConfig.Address)
 			if err != nil {
 				return nil, err
 			}

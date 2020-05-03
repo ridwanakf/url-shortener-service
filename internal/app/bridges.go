@@ -22,7 +22,7 @@ func newBridges(cfg *config.Config) (*Bridges, error) {
 	if redisAddress == "" {
 		redisAddress = cfg.Redis.Address
 	}
-	rd := redis.NewRedigo(redisAddress, cfg.Redis)
+	rd := redis.NewRedigo(cfg.Redis)
 
 	return &Bridges{
 		Json:      js,

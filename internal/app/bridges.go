@@ -19,8 +19,8 @@ func newBridges(cfg *config.Config) (*Bridges, error) {
 	js := json.NewJsoniter()
 
 	redisAddress := os.Getenv("REDIS_URL")
-	if redisAddress == "" {
-		redisAddress = cfg.Redis.Address
+	if redisAddress != "" {
+		 cfg.Redis.Address = redisAddress
 	}
 	rd := redis.NewRedigo(cfg.Redis)
 

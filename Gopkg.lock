@@ -154,6 +154,19 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:a6ef9d4c40c63b9c814099de6e69bf003575f3914a78977cca73d6940ffcf52b"
+  name = "github.com/ridwanakf/go-bridges"
+  packages = [
+    ".",
+    "json",
+    "redis",
+    "redisjson",
+  ]
+  pruneopts = "UT"
+  revision = "8db99c0abdb637870c77bf3f8d439d6c5785e428"
+
+[[projects]]
   digest = "1:5e8f46b412421d2d6cceea845d28ac46f3f5a5f60a6e86f0ee75e24fd43a02a9"
   name = "github.com/stretchr/testify"
   packages = ["assert"]
@@ -192,13 +205,15 @@
     "github.com/go-pg/migrations",
     "github.com/go-pg/pg",
     "github.com/golang/mock/gomock",
-    "github.com/gomodule/redigo/redis",
     "github.com/google/gops/agent",
     "github.com/gorilla/mux",
     "github.com/jmoiron/sqlx",
-    "github.com/json-iterator/go",
     "github.com/lib/pq",
     "github.com/pkg/errors",
+    "github.com/ridwanakf/go-bridges",
+    "github.com/ridwanakf/go-bridges/json",
+    "github.com/ridwanakf/go-bridges/redis",
+    "github.com/ridwanakf/go-bridges/redisjson",
     "github.com/stretchr/testify/assert",
     "gopkg.in/yaml.v2",
   ]

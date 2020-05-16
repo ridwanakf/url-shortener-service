@@ -1,6 +1,6 @@
 package redis_cache
 
-import bridge "github.com/ridwanakf/url-shortener-service/internal"
+import bridge "github.com/ridwanakf/go-bridges"
 
 type ShortenerCacheRepo struct {
 	rd  bridge.Redis

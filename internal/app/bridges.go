@@ -1,12 +1,13 @@
 package app
 
 import (
-	bridge "github.com/ridwanakf/url-shortener-service/internal"
-	"github.com/ridwanakf/url-shortener-service/internal/app/config"
-	"github.com/ridwanakf/url-shortener-service/internal/bridge/json"
-	"github.com/ridwanakf/url-shortener-service/internal/bridge/redis"
-	"github.com/ridwanakf/url-shortener-service/internal/bridge/redisjson"
 	"os"
+
+	bridge "github.com/ridwanakf/go-bridges"
+	"github.com/ridwanakf/go-bridges/json"
+	"github.com/ridwanakf/go-bridges/redis"
+	"github.com/ridwanakf/go-bridges/redisjson"
+	"github.com/ridwanakf/url-shortener-service/internal/app/config"
 )
 
 type Bridges struct {
@@ -20,15 +21,25 @@ func newBridges(cfg *config.Config) (*Bridges, error) {
 
 	redisAddress := os.Getenv("REDIS_URL")
 	if redisAddress != "" {
-		 cfg.Redis.Address = redisAddress
+		cfg.Redis.Address = redisAddress
 	}
-	rd := redis.NewRedigo(cfg.Redis)
+
+	rd := redis.NewRedigo(redisConfigConverter(cfg.Redis))
 
 	return &Bridges{
 		Json:      js,
 		RedisJson: redisjson.NewRedisJson(rd, js),
 		Redis:     rd,
 	}, nil
+}
+
+func redisConfigConverter(config config.Redis) redis.ConfigOptions {
+	return redis.ConfigOptions{
+		Address:   config.Address,
+		Timeout:   config.Timeout,
+		MaxIdle:   config.MaxIdle,
+		MaxActive: config.MaxActive,
+	}
 }
 
 func (a *Bridges) Close() []error {

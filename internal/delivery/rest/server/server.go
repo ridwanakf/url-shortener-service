@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -10,35 +11,56 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/ridwanakf/url-shortener-service/internal/app/config"
-	"github.com/ridwanakf/url-shortener-service/internal/delivery/rest/middleware"
+	md "github.com/ridwanakf/url-shortener-service/internal/delivery/rest/middleware"
 )
 
-func New() *gin.Engine {
-	g := gin.Default()
+// New instantates new Echo server
+func New() *echo.Echo {
+	e := echo.New()
+	e.Use(middleware.Logger(),
+		middleware.Recover(),
+		middleware.Secure(),
+		md.CORS(),
+		md.Headers())
 
-	g.Use(middleware.CORS(),
-		middleware.Headers())
+	e.Static("/", "public/static")
 
-	//g.Static("/", "public/static")
-	tmpl := template.Must(template.ParseGlob("public/view/*.html"))
-	g.SetHTMLTemplate(tmpl)
+	e.Validator = &CustomValidator{V: validator.New()}
+	custErr := &customErrHandler{e: e}
+	e.HTTPErrorHandler = custErr.handler
+	e.Binder = &CustomBinder{b: &echo.DefaultBinder{}}
+	e.Renderer = &TemplateRenderer{
+		templates: template.Must(template.ParseGlob("public/view/*.html")),
+	}
 
-	return g
+	return e
 }
 
-func Start(g *gin.Engine, cfg *config.Server) {
-	srv := &http.Server{
-		Handler:      g,
+type TemplateRenderer struct {
+	templates *template.Template
+}
+
+func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+// Start starts echo server
+func Start(e *echo.Echo, cfg *config.Server) {
+	s := &http.Server{
 		Addr:         ":" + cfg.Port,
 		ReadTimeout:  time.Duration(cfg.ReadTimeoutSeconds) * time.Second,
 		WriteTimeout: time.Duration(cfg.WriteTimeoutSeconds) * time.Second,
 	}
+	e.Debug = cfg.Debug
 
 	// Start server
 	go func() {
-		if err := srv.ListenAndServe(); err != nil {
-			log.Fatalf("listen: %s\n", err)
+		if err := e.StartServer(s); err != nil {
+			e.Logger.Info("Shutting down the server")
 		}
 	}()
 
@@ -51,7 +73,7 @@ func Start(g *gin.Engine, cfg *config.Server) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+	if err := e.Shutdown(ctx); err != nil {
+		e.Logger.Fatal(err)
 	}
 }

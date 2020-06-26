@@ -1,29 +1,32 @@
 package middleware
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
 )
 
-func Headers() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Protects from MimeType Sniffing
-		c.Header("X-Content-Type-Options", "nosniff")
-		// Prevents browser from pre-fetching DNS
-		c.Header("X-DNS-Prefetch-Control", "off")
-		// Denies website content to be served in an iframe
-		c.Header("X-Frame-Options", "DENY")
-		c.Header("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
-		// Prevents Internet Explorer from executing downloads in site's context
-		c.Header("X-Download-Options", "noopen")
-		// Minimal XSS protection
-		c.Header("X-XSS-Protection", "1; mode=block")
+// Headers adds general security headers for basic security measures
+func Headers() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			// Protects from MimeType Sniffing
+			c.Response().Header().Set("X-Content-Type-Options", "nosniff")
+			// Prevents browser from prefetching DNS
+			c.Response().Header().Set("X-DNS-Prefetch-Control", "off")
+			// Denies website content to be served in an iframe
+			c.Response().Header().Set("X-Frame-Options", "DENY")
+			c.Response().Header().Set("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
+			// Prevents Internet Explorer from executing downloads in site's context
+			c.Response().Header().Set("X-Download-Options", "noopen")
+			// Minimal XSS protection
+			c.Response().Header().Set("X-XSS-Protection", "1; mode=block")
+			return next(c)
+		}
 	}
 }
 
 // CORS adds Cross-Origin Resource Sharing support
-func CORS() gin.HandlerFunc {
-	return cors.New(cors.Config{
+func CORS() echo.MiddlewareFunc {
+	return middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*"},
 		MaxAge:           86400,
 		AllowMethods:     []string{"POST", "GET", "PUT", "DELETE", "PATCH", "HEAD"},

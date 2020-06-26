@@ -3,13 +3,12 @@ module github.com/ridwanakf/url-shortener-service
 go 1.13
 
 require (
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-pg/migrations v6.7.3+incompatible
 	github.com/go-pg/pg v8.0.7+incompatible
 	github.com/golang/mock v1.4.3
 	github.com/gomodule/redigo v2.0.0+incompatible // indirect
-	github.com/google/gops v0.3.10
-	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.7.0

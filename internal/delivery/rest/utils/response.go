@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"net/http"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -23,7 +23,8 @@ type (
 	}
 )
 
-func WriteResponse(w http.ResponseWriter, req *http.Request, start time.Time, status int, data interface{}, messages ...string) {
+func WriteResponse(c *gin.Context, start time.Time, status int, data interface{}, messages ...string) {
+	w := c.Writer
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)

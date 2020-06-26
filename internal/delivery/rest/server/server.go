@@ -2,23 +2,26 @@ package server
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/ridwanakf/url-shortener-service/internal/app/config"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/ridwanakf/url-shortener-service/internal/app/config"
+	"github.com/ridwanakf/url-shortener-service/internal/delivery/rest/middleware"
 )
 
 func New() *gin.Engine {
 	g := gin.Default()
 
-	//g.Use(secure.CORS(), secure.Headers(), middleware.Secure())
+	g.Use(middleware.CORS(),
+		middleware.Headers())
 
-	g.Static("/", "public/static")
-	tmpl := template.Must(template.ParseGlob("public/views/*.html"))
+	//g.Static("/", "public/static")
+	tmpl := template.Must(template.ParseGlob("public/view/*.html"))
 	g.SetHTMLTemplate(tmpl)
 
 	return g

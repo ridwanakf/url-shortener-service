@@ -92,18 +92,18 @@ func (mr *MockShortenerUCMockRecorder) GenerateShortURL(arg0 interface{}) *gomoc
 }
 
 // GetAllURL mocks base method
-func (m *MockShortenerUC) GetAllURL() ([]entity.URL, error) {
+func (m *MockShortenerUC) GetAllURL(arg0 string) ([]entity.URL, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllURL")
+	ret := m.ctrl.Call(m, "GetAllURL", arg0)
 	ret0, _ := ret[0].([]entity.URL)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAllURL indicates an expected call of GetAllURL
-func (mr *MockShortenerUCMockRecorder) GetAllURL() *gomock.Call {
+func (mr *MockShortenerUCMockRecorder) GetAllURL(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllURL", reflect.TypeOf((*MockShortenerUC)(nil).GetAllURL))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllURL", reflect.TypeOf((*MockShortenerUC)(nil).GetAllURL), arg0)
 }
 
 // GetLongURL mocks base method

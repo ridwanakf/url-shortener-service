@@ -14,6 +14,7 @@ func newUsecases(repos *Repos, cfg *config.Config) *Usecases {
 	return &Usecases{
 		ShortenerUC: usecase.NewShortenerUsecase(
 			repos.ShortenerDB,
+			repos.ShortenerCache,
 			cfg.Params.ShortUrlLength,
 			cfg.Params.ExpireDuration),
 	}

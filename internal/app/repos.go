@@ -3,8 +3,8 @@ package app
 import (
 	"github.com/jmoiron/sqlx"
 	"github.com/ridwanakf/url-shortener-service/internal"
-	db2 "github.com/ridwanakf/url-shortener-service/internal/repo/db"
-	"github.com/ridwanakf/url-shortener-service/internal/repo/redis_cache"
+	"github.com/ridwanakf/url-shortener-service/internal/repo/cache/redis"
+	"github.com/ridwanakf/url-shortener-service/internal/repo/db/postgres"
 )
 
 type Repos struct {
@@ -14,8 +14,8 @@ type Repos struct {
 
 func newRepos(bridges *Bridges, db *sqlx.DB) (*Repos, error) {
 	r := &Repos{
-		ShortenerDB:    db2.NewShortenerDBRepo(db),
-		ShortenerCache: redis_cache.NewShortenerCacheRepo(bridges.Redis, bridges.Json),
+		ShortenerDB:    postgres.NewShortenerDBRepo(db),
+		ShortenerCache: redis.NewShortenerCacheRepo(bridges.Redis),
 	}
 
 	return r, nil

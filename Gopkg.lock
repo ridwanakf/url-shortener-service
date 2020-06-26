@@ -94,14 +94,6 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:7cd2924a44ecf80a319cfa2378529fabd348d011b739fb4eccc565f65e3296c4"
-  name = "github.com/json-iterator/go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "acfec88f7a0d5140ace3dcdbee10184e3684a9e1"
-  version = "v1.1.9"
-
-[[projects]]
   branch = "master"
   digest = "1:f433da6fbabb0bd1bd730fd340782015c644123d02eb78c20c69ce03352daad1"
   name = "github.com/kardianos/osext"
@@ -122,22 +114,6 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
-  name = "github.com/modern-go/concurrent"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
-  version = "1.0.3"
-
-[[projects]]
-  digest = "1:e32bdbdb7c377a07a9a46378290059822efdce5c8d96fe71940d87cb4f918855"
-  name = "github.com/modern-go/reflect2"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
-  version = "1.0.1"
-
-[[projects]]
   digest = "1:9e1d37b58d17113ec3cb5608ac0382313c5b59470b94ed97d0976e69c7022314"
   name = "github.com/pkg/errors"
   packages = ["."]
@@ -155,13 +131,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a6ef9d4c40c63b9c814099de6e69bf003575f3914a78977cca73d6940ffcf52b"
+  digest = "1:d62436ac43f6f50af94f7b65126f4bd2acd84aed7f686f2f855878b6c837c06f"
   name = "github.com/ridwanakf/go-bridges"
   packages = [
     ".",
-    "json",
     "redis",
-    "redisjson",
   ]
   pruneopts = "UT"
   revision = "8db99c0abdb637870c77bf3f8d439d6c5785e428"
@@ -211,9 +185,7 @@
     "github.com/lib/pq",
     "github.com/pkg/errors",
     "github.com/ridwanakf/go-bridges",
-    "github.com/ridwanakf/go-bridges/json",
     "github.com/ridwanakf/go-bridges/redis",
-    "github.com/ridwanakf/go-bridges/redisjson",
     "github.com/stretchr/testify/assert",
     "gopkg.in/yaml.v2",
   ]

@@ -44,8 +44,8 @@ func (s *ShortenerService) RedirectHandler(w http.ResponseWriter, r *http.Reques
 
 func (s *ShortenerService) GetListDataHandler(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-
-	list, err := s.uc.GetAllURL()
+	userID := ""
+	list, err := s.uc.GetAllURL(userID)
 	if err != nil {
 		log.Printf("[ShortenerService][GetListDataHandler] error getting list url :%+v\n", err)
 		utils.WriteResponse(w, r, start, http.StatusBadRequest, nil, err.Error())

@@ -1,4 +1,4 @@
-package db
+package postgres
 
 import (
 	"github.com/jmoiron/sqlx"
@@ -16,7 +16,7 @@ func NewShortenerDBRepo(db *sqlx.DB) *ShortenerDBRepo {
 	}
 }
 
-func (r *ShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
+func (r *ShortenerDBRepo) GetAllURL(userID string) ([]entity.URL, error) {
 	var res []entity.URL
 
 	err := r.db.Select(&res, SQLGetAllURLQuery)
@@ -27,12 +27,12 @@ func (r *ShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
 	return res, nil
 }
 
-func (r *ShortenerDBRepo) GetLongURL(shortURL string) (string, error) {
-	var res string
+func (r *ShortenerDBRepo) GetURL(shortURL string) (entity.URL, error) {
+	var res entity.URL
 
 	err := r.db.Get(&res, SQLGetLongURLQuery, shortURL)
 	if err != nil {
-		return "", err
+		return res, err
 	}
 
 	return res, nil
@@ -79,7 +79,7 @@ func (r *ShortenerDBRepo) IsShortURLExist(shortURL string) bool {
 func (r *ShortenerDBRepo) HasShortURLExpired(shortURL string) bool {
 	var hasExpired bool
 
-	err := r.db.Get(&hasExpired, SQLHasEntryExpiredQuery, time.Now(), shortURL)
+	err := r.db.Get(&hasExpired, SQLHasEntryExpiredQuery, time.Now().UTC(), shortURL)
 	if err != nil {
 		panic(err)
 	}

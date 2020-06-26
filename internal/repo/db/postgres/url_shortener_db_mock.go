@@ -62,33 +62,33 @@ func (mr *MockShortenerDBRepoMockRecorder) DeleteURL(arg0 interface{}) *gomock.C
 }
 
 // GetAllURL mocks base method
-func (m *MockShortenerDBRepo) GetAllURL() ([]entity.URL, error) {
+func (m *MockShortenerDBRepo) GetAllURL(arg0 string) ([]entity.URL, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllURL")
+	ret := m.ctrl.Call(m, "GetAllURL", arg0)
 	ret0, _ := ret[0].([]entity.URL)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAllURL indicates an expected call of GetAllURL
-func (mr *MockShortenerDBRepoMockRecorder) GetAllURL() *gomock.Call {
+func (mr *MockShortenerDBRepoMockRecorder) GetAllURL(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllURL", reflect.TypeOf((*MockShortenerDBRepo)(nil).GetAllURL))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllURL", reflect.TypeOf((*MockShortenerDBRepo)(nil).GetAllURL), arg0)
 }
 
-// GetLongURL mocks base method
-func (m *MockShortenerDBRepo) GetLongURL(arg0 string) (string, error) {
+// GetURL mocks base method
+func (m *MockShortenerDBRepo) GetURL(arg0 string) (entity.URL, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLongURL", arg0)
-	ret0, _ := ret[0].(string)
+	ret := m.ctrl.Call(m, "GetURL", arg0)
+	ret0, _ := ret[0].(entity.URL)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetLongURL indicates an expected call of GetLongURL
-func (mr *MockShortenerDBRepoMockRecorder) GetLongURL(arg0 interface{}) *gomock.Call {
+// GetURL indicates an expected call of GetURL
+func (mr *MockShortenerDBRepoMockRecorder) GetURL(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLongURL", reflect.TypeOf((*MockShortenerDBRepo)(nil).GetLongURL), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetURL", reflect.TypeOf((*MockShortenerDBRepo)(nil).GetURL), arg0)
 }
 
 // HasShortURLExpired mocks base method

@@ -15,7 +15,7 @@ type Repos struct {
 func newRepos(bridges *Bridges, db *sqlx.DB) (*Repos, error) {
 	r := &Repos{
 		ShortenerDB:    db2.NewShortenerDBRepo(db),
-		ShortenerCache: redis_cache.NewShortenerCacheRepo(bridges.Redis, bridges.Json),
+		ShortenerCache: redis_cache.NewShortenerCacheRepo(bridges.Redis),
 	}
 
 	return r, nil

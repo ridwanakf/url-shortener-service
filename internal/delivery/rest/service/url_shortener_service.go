@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/mux"
 	"github.com/ridwanakf/url-shortener-service/internal"
 	"github.com/ridwanakf/url-shortener-service/internal/app"
@@ -23,7 +24,7 @@ func NewShortenerService(app *app.UrlShortenerApp) *ShortenerService {
 	}
 }
 
-func (s *ShortenerService) IndexHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShortenerService) IndexHandler(c *gin.Context) {
 	http.Error(w, "Forbidden", http.StatusForbidden)
 }
 

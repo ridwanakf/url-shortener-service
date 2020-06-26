@@ -1,7 +1,8 @@
 package config
 
 type Config struct {
-	DB     Database `yaml:"database"`
+	Server Server   `yaml:"server"`
 	Params Params   `yaml:"params"`
+	DB     Database `yaml:"database"`
 	Redis  Redis    `yaml:"redis"`
 }

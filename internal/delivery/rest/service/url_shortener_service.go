@@ -29,12 +29,10 @@ func (s *ShortenerService) IndexHandler(c *gin.Context) {
 }
 
 func (s *ShortenerService) RedirectHandler(c *gin.Context) {
-	// Check if route is /api/v1/list. This is limitation of Gin
-
 	start := time.Now()
 
 	shortURL := c.Param("shortUrl")
-
+	log.Println("PARAMs:", shortURL)
 	longURL, err := s.uc.GetLongURL(shortURL)
 	if err != nil {
 		//or redirect to main page

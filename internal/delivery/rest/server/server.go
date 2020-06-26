@@ -30,7 +30,7 @@ func New() *gin.Engine {
 func Start(g *gin.Engine, cfg *config.Server) {
 	srv := &http.Server{
 		Handler:      g,
-		Addr:         cfg.Port,
+		Addr:         ":" + cfg.Port,
 		ReadTimeout:  time.Duration(cfg.ReadTimeoutSeconds) * time.Second,
 		WriteTimeout: time.Duration(cfg.WriteTimeoutSeconds) * time.Second,
 	}

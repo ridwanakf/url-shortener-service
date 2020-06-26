@@ -25,8 +25,6 @@ type (
 
 func WriteResponse(c *gin.Context, start time.Time, status int, data interface{}, messages ...string) {
 	w := c.Writer
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	w.Write(getBodyResponse(time.Since(start).Seconds(), data, messages))
 	return

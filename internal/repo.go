@@ -5,7 +5,7 @@ import (
 )
 
 // ShortenerDBRepo contains repo for all URL Shortener DB
-//go:generate mockgen -destination=repo/db/url_shortener_db_mock.go -package=db github.com/ridwanakf/url-shortener-service/internal ShortenerDBRepo
+//go:generate mockgen -destination=repo/db/postgres/url_shortener_db_mock.go -package=postgres github.com/ridwanakf/url-shortener-service/internal ShortenerDBRepo
 type ShortenerDBRepo interface {
 	GetAllURL(userID string) ([]entity.URL, error)
 	GetURL(shortURL string) (entity.URL, error)
@@ -18,7 +18,7 @@ type ShortenerDBRepo interface {
 }
 
 // ShortenerCacheRepo contains repo for all URL Shortener Cache
-//go:generate mockgen -destination=repo/redis_cache/url_shortener_redis_mock.go -package=redis_cache github.com/ridwanakf/url-shortener-service/internal ShortenerCacheRepo
+//go:generate mockgen -destination=repo/cache/redis/url_shortener_redis_mock.go -package=redis github.com/ridwanakf/url-shortener-service/internal ShortenerCacheRepo
 type ShortenerCacheRepo interface {
 	GetAllURL(userID string) ([]entity.URL, error)
 	GetURL(shortURL string) (string, error)

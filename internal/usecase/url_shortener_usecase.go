@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"log"
 	"math/rand"
 	"net/url"
 	"time"
@@ -12,22 +13,24 @@ import (
 
 type ShortenerUsecase struct {
 	db             internal.ShortenerDBRepo
+	cache          internal.ShortenerCacheRepo
 	shortUrlLength int
 	expireDuration int
 }
 
-func NewShortenerUsecase(db internal.ShortenerDBRepo, shortUrlLength int, expireDuration int) *ShortenerUsecase {
+func NewShortenerUsecase(db internal.ShortenerDBRepo, cache internal.ShortenerCacheRepo, shortUrlLength int, expireDuration int) *ShortenerUsecase {
 	return &ShortenerUsecase{
 		db:             db,
+		cache:          cache,
 		shortUrlLength: shortUrlLength,
 		expireDuration: expireDuration,
 	}
 }
 
-func (u *ShortenerUsecase) GetAllURL() ([]entity.URL, error) {
+func (u *ShortenerUsecase) GetAllURL(userID string) ([]entity.URL, error) {
 	var urls []entity.URL
 
-	urls, err := u.db.GetAllURL()
+	urls, err := u.db.GetAllURL(userID) //TODO: implement user id when OAUTH has been implemented
 	if err != nil {
 		return []entity.URL{}, err
 	}
@@ -53,8 +56,8 @@ func (u *ShortenerUsecase) CreateNewShortURL(longURL string) (entity.URL, error)
 	URL := entity.URL{
 		ShortURL:  shortURL,
 		LongURL:   longURL,
-		CreatedAt: time.Now(),
-		ExpireAt:  time.Now().Add(time.Hour * 24 * time.Duration(u.expireDuration)),
+		CreatedAt: time.Now().UTC(),
+		ExpireAt:  time.Now().UTC().Add(time.Hour * 24 * time.Duration(u.expireDuration)),
 		CreatedBy: "", //TODO: using ID if auth is implemented
 	}
 
@@ -78,8 +81,8 @@ func (u *ShortenerUsecase) CreateNewCustomShortURL(shortURL string, longURL stri
 	URL := entity.URL{
 		ShortURL:  shortURL,
 		LongURL:   longURL,
-		CreatedAt: time.Now(),
-		ExpireAt:  time.Now().Add(time.Hour * 24 * time.Duration(u.expireDuration)),
+		CreatedAt: time.Now().UTC(),
+		ExpireAt:  time.Now().UTC().Add(time.Hour * 24 * time.Duration(u.expireDuration)),
 		CreatedBy: "", //TODO: using ID if auth is implemented
 	}
 
@@ -99,10 +102,50 @@ func (u *ShortenerUsecase) UpdateShortURL(shortURL string, longURL string) error
 		return err
 	}
 
+	// Delete previous record from cache if exist
+	isExistInCache, err := u.cache.IsSingleURLExist(shortURL)
+	if err != nil {
+		log.Printf("[ShortenerUsecase][UpdateShortURL] : %+v\n", err)
+	}
+
+	if isExistInCache {
+		_, err := u.cache.DeleteURL(shortURL)
+		if err != nil {
+			log.Printf("[ShortenerUsecase][UpdateShortURL] : %+v\n", err)
+		}
+	}
+
 	return nil
 }
 
 func (u *ShortenerUsecase) GetLongURL(shortURL string) (string, error) {
+	// Check from cache
+	isExistInCache, err := u.cache.IsSingleURLExist(shortURL)
+	if err != nil {
+		log.Printf("[ShortenerUsecase][GetLongURL] : %+v\n", err)
+	}
+
+	if isExistInCache {
+		hasExpired, err := u.cache.HasShortURLExpired(shortURL)
+		if err != nil {
+			log.Printf("[ShortenerUsecase][GetLongURL] : %+v\n", err)
+		}
+
+		if hasExpired {
+			_, err := u.cache.DeleteURL(shortURL)
+			if err != nil {
+				log.Printf("[ShortenerUsecase][GetLongURL] : %+v\n", err)
+			}
+		} else {
+			longURL, err := u.cache.GetURL(shortURL)
+			if err != nil {
+				log.Printf("[ShortenerUsecase][GetLongURL] : %+v\n", err)
+			}
+			return longURL, err
+		}
+	}
+
+	// Check from db
 	if !u.db.IsShortURLExist(shortURL) {
 		return "", errors.New("URL does not exist")
 	}
@@ -114,12 +157,18 @@ func (u *ShortenerUsecase) GetLongURL(shortURL string) (string, error) {
 		return "", errors.New("URL has expired!")
 	}
 
-	longURL, err := u.db.GetLongURL(shortURL)
+	urlEntity, err := u.db.GetURL(shortURL)
 	if err != nil {
 		return "", err
 	}
 
-	return longURL, nil
+	// Set cache
+	err = u.cache.SetURL(urlEntity)
+	if err != nil {
+		log.Printf("[ShortenerUsecase][GetLongURL] : %+v\n", err)
+	}
+
+	return urlEntity.LongURL, nil
 }
 
 func (u *ShortenerUsecase) DeleteURL(shortURL string) error {
@@ -129,6 +178,19 @@ func (u *ShortenerUsecase) DeleteURL(shortURL string) error {
 
 	if err := u.db.DeleteURL(shortURL); err != nil {
 		return err
+	}
+
+	// Delete from cache if exist
+	isExistInCache, err := u.cache.IsSingleURLExist(shortURL)
+	if err != nil {
+		log.Printf("[ShortenerUsecase][DeleteURL] : %+v\n", err)
+	}
+
+	if isExistInCache {
+		_, err := u.cache.DeleteURL(shortURL)
+		if err != nil {
+			log.Printf("[ShortenerUsecase][DeleteURL] : %+v\n", err)
+		}
 	}
 
 	return nil

@@ -18,8 +18,8 @@ func initAPIHandler(eg *echo.Group, svc *service.Services) {
 
 func Start(app *app.UrlShortenerApp) {
 	port := os.Getenv("PORT")
-	if port == "" {
-		port = app.Cfg.Server.Port
+	if port != "" {
+		app.Cfg.Server.Port = port
 	}
 
 	srv := server.New()

@@ -1,5 +1,10 @@
-params:
+server:
   port: 5000
+  debug: true
+  read_timeout_seconds: 10
+  write_timeout_seconds: 5
+
+params:
   short_url_length: 6
   expire_duration: 30 #days
 

@@ -2,15 +2,14 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
+	"io/ioutil"
+	"net/http"
+
+	"github.com/labstack/echo"
 	"github.com/ridwanakf/url-shortener-service/internal"
 	"github.com/ridwanakf/url-shortener-service/internal/app"
 	"github.com/ridwanakf/url-shortener-service/internal/delivery/rest/utils"
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"time"
 )
 
 type ShortenerService struct {
@@ -23,61 +22,52 @@ func NewShortenerService(app *app.UrlShortenerApp) *ShortenerService {
 	}
 }
 
-func (s *ShortenerService) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Forbidden", http.StatusForbidden)
+func (s *ShortenerService) IndexHandler(c echo.Context) error {
+	return c.Render(http.StatusOK, "index", nil)
 }
 
-func (s *ShortenerService) RedirectHandler(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
-
-	params := mux.Vars(r)
-	shortURL := params["shortUrl"]
+func (s *ShortenerService) RedirectHandler(c echo.Context) error {
+	shortURL := c.Param("shortUrl")
 
 	longURL, err := s.uc.GetLongURL(shortURL)
 	if err != nil {
-		//or redirect to main page
-		utils.WriteResponse(w, r, start, http.StatusNotFound, NotFound, err.Error())
-		return
+		return c.JSON(http.StatusNotFound, NotFound)
 	}
-	http.Redirect(w, r, longURL, http.StatusMovedPermanently)
+	return c.Redirect(http.StatusMovedPermanently, longURL)
 }
 
-func (s *ShortenerService) GetListDataHandler(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
+func (s *ShortenerService) GetListDataHandler(c echo.Context) error {
 	userID := ""
 	list, err := s.uc.GetAllURL(userID)
 	if err != nil {
-		log.Printf("[ShortenerService][GetListDataHandler] error getting list url :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, nil, err.Error())
-		return
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error()})
 	}
 
-	list = utils.ConvertBatchShortURL(r, list)
-	utils.WriteResponse(w, r, start, http.StatusOK, list, "success")
+	list = utils.ConvertBatchShortURL(c.Request(), list)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data":    list,
+		"message": "success"},
+	)
 }
 
-func (s *ShortenerService) CreateURLHandler(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
-
-	body, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+func (s *ShortenerService) CreateURLHandler(c echo.Context) error {
+	body, err := ioutil.ReadAll(c.Request().Body)
+	defer c.Request().Body.Close()
 	if err != nil {
-		log.Printf("[ShortenerService][CreateURLHandler] error opening body :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, nil, err.Error())
-		return
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error()})
 	}
 
 	var bodyReq utils.Request
 	err = json.Unmarshal(body, &bodyReq)
 	if err != nil {
-		log.Printf("[ShortenerService][CreateURLHandler] error unmarshal :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, nil, err.Error())
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error()})
 	}
 	if bodyReq.LongURL == "" {
-		log.Printf("[ShortenerService][CreateURLHandler] longUrl not found!")
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, nil, "longUrl not found!")
-		return
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "longUrl not found!"})
 	}
 
 	var newURL entity.URL
@@ -87,84 +77,73 @@ func (s *ShortenerService) CreateURLHandler(w http.ResponseWriter, r *http.Reque
 		newURL, err = s.uc.CreateNewCustomShortURL(bodyReq.ShortURL, bodyReq.LongURL)
 	}
 	if err != nil {
-		log.Printf("[ShortenerService][CreateURLHandler] error creating short url :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, nil, err.Error())
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error()})
 	}
 
 	res := utils.Request{
-		ShortURL: utils.ConvertShortURL(r, newURL.ShortURL),
+		ShortURL: utils.ConvertShortURL(c.Request(), newURL.ShortURL),
 		LongURL:  newURL.LongURL,
 	}
 
-	utils.WriteResponse(w, r, start, http.StatusOK, res, "success")
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data":    res,
+		"message": "success"},
+	)
 }
 
-func (s *ShortenerService) UpdateURLHandler(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
-	status := utils.ResponseBoolean{Status: "failed"}
-
-	body, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+func (s *ShortenerService) UpdateURLHandler(c echo.Context) error {
+	body, err := ioutil.ReadAll(c.Request().Body)
+	defer c.Request().Body.Close()
 	if err != nil {
-		log.Printf("[ShortenerService][UpdateURLHandler] error opening body :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, err.Error())
-		return
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error()})
 	}
 
 	var bodyReq utils.Request
 	err = json.Unmarshal(body, &bodyReq)
 	if err != nil {
-		log.Printf("[ShortenerService][UpdateURLHandler] error unmarshal :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, err.Error())
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error()})
 	}
 	if bodyReq.LongURL == "" {
-		log.Printf("[ShortenerService][UpdateURLHandler] longUrl not found!")
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, "longUrl not found!")
-		return
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "longUrl not found!"})
 	}
 
 	err = s.uc.UpdateShortURL(bodyReq.ShortURL, bodyReq.LongURL)
 	if err != nil {
-		log.Printf("[ShortenerService][UpdateURLHandler] error updating short url :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, err.Error())
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error()})
 	}
 
-	status.Status = "success"
-
-	utils.WriteResponse(w, r, start, http.StatusOK, status, "success")
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success"},
+	)
 }
 
-func (s *ShortenerService) DeleteURLHandler(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
-	status := utils.ResponseBoolean{Status: "failed"}
-
-	body, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+func (s *ShortenerService) DeleteURLHandler(c echo.Context) error {
+	body, err := ioutil.ReadAll(c.Request().Body)
+	defer c.Request().Body.Close()
 	if err != nil {
-		log.Printf("[ShortenerService][DeleteURLHandler] error opening body :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, err.Error())
-		return
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error()})
 	}
 
 	var bodyReq utils.Request
 	err = json.Unmarshal(body, &bodyReq)
 	if err != nil {
-		log.Printf("[ShortenerService][DeleteURLHandler] error unmarshal :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, err.Error())
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error()})
 	}
 
 	err = s.uc.DeleteURL(bodyReq.ShortURL)
 	if err != nil {
-		log.Printf("[ShortenerService][DeleteURLHandler] error deleting short url :%+v\n", err)
-		utils.WriteResponse(w, r, start, http.StatusBadRequest, status, err.Error())
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error()})
 	}
 
-	status.Status = "success"
-
-	utils.WriteResponse(w, r, start, http.StatusOK, status, "success")
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success"},
+	)
 }

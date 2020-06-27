@@ -1,7 +1,6 @@
 package app
 
 import (
-	"log"
 	"os"
 
 	"github.com/caarlos0/env/v6"
@@ -77,18 +76,13 @@ func readConfig(cfgPath string) (config.Config, error) {
 	if err := env.Parse(&cfg); err != nil {
 		return config.Config{}, errors.Wrapf(err, "error reading config from ENV")
 	}
-	
+
 	return cfg, nil
 }
 
 func initDB(cfg config.Config) (*sqlx.DB, error) {
-	dbAddress := os.Getenv("DATABASE_URL")
-	if dbAddress == "" {
-		dbAddress = cfg.DB.Address
-	}
-
 	// Connect SQL DB
-	db, err := sqlx.Connect(cfg.DB.Driver, dbAddress)
+	db, err := sqlx.Connect(cfg.DB.Driver, cfg.DB.Address)
 	if err != nil {
 		return nil, err
 	}

@@ -4,7 +4,6 @@ import (
 	bridge "github.com/ridwanakf/go-bridges"
 	"github.com/ridwanakf/go-bridges/redis"
 	"github.com/ridwanakf/url-shortener-service/internal/app/config"
-	"os"
 )
 
 type Bridges struct {
@@ -12,13 +11,7 @@ type Bridges struct {
 }
 
 func newBridges(cfg *config.Config) (*Bridges, error) {
-	redisAddress := os.Getenv("REDIS_URL")
-	if redisAddress != "" {
-		cfg.Redis.Address = redisAddress
-	}
-
 	rd := redis.NewRedigo(redisConfigConverter(cfg.Redis))
-
 	return &Bridges{
 		Redis: rd,
 	}, nil

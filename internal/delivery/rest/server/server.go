@@ -10,8 +10,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/"
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/ridwanakf/url-shortener-service/internal/app/config"

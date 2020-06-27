@@ -8,7 +8,6 @@ require (
 	github.com/go-pg/migrations v6.7.3+incompatible
 	github.com/go-pg/pg v8.0.7+incompatible
 	github.com/go-playground/validator v9.31.0+incompatible
-	github.com/go-playground/validator/v10 v10.2.0
 	github.com/golang/mock v1.4.3
 	github.com/gomodule/redigo v2.0.0+incompatible // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

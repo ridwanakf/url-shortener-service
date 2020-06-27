@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 // Headers adds general security headers for basic security measures

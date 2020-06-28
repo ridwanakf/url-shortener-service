@@ -1,8 +1,6 @@
 package rest
 
 import (
-	"os"
-
 	"github.com/labstack/echo"
 	"github.com/ridwanakf/url-shortener-service/internal/app"
 	"github.com/ridwanakf/url-shortener-service/internal/delivery/rest/server"
@@ -17,11 +15,6 @@ func initAPIHandler(eg *echo.Group, svc *service.Services) {
 }
 
 func Start(app *app.UrlShortenerApp) {
-	port := os.Getenv("PORT")
-	if port != "" {
-		app.Cfg.Server.Port = port
-	}
-
 	srv := server.New()
 	svc := service.GetServices(app)
 

@@ -3,6 +3,7 @@ package app
 import (
 	"os"
 
+	"github.com/caarlos0/env/v6"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
@@ -64,23 +65,24 @@ func readConfig(cfgPath string) (config.Config, error) {
 
 	var cfg config.Config
 
+	// Read from config file
 	decoder := yaml.NewDecoder(f)
 	err = decoder.Decode(&cfg)
 	if err != nil {
-		return config.Config{}, errors.Wrapf(err, "error reading config")
+		return config.Config{}, errors.Wrapf(err, "error reading config from file")
+	}
+
+	// Replace vars that exist in ENV
+	if err := env.Parse(&cfg); err != nil {
+		return config.Config{}, errors.Wrapf(err, "error reading config from ENV")
 	}
 
 	return cfg, nil
 }
 
 func initDB(cfg config.Config) (*sqlx.DB, error) {
-	dbAddress := os.Getenv("DATABASE_URL")
-	if dbAddress == "" {
-		dbAddress = cfg.DB.Address
-	}
-
 	// Connect SQL DB
-	db, err := sqlx.Connect(cfg.DB.Driver, dbAddress)
+	db, err := sqlx.Connect(cfg.DB.Driver, cfg.DB.Address)
 	if err != nil {
 		return nil, err
 	}

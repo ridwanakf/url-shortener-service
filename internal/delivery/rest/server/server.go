@@ -26,15 +26,12 @@ func New() *echo.Echo {
 		md.CORS(),
 		md.Headers())
 
-	e.Static("/", "public/static")
+	e.Static("/static", "web/build/static")
 
 	e.Validator = &CustomValidator{V: validator.New()}
 	custErr := &customErrHandler{e: e}
 	e.HTTPErrorHandler = custErr.handler
 	e.Binder = &CustomBinder{b: &echo.DefaultBinder{}}
-	e.Renderer = &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("public/view/*.html")),
-	}
 
 	return e
 }

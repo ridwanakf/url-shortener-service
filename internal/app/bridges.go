@@ -1,8 +1,8 @@
 package app
 
 import (
-	bridge "github.com/ridwanakf/go-bridges"
-	"github.com/ridwanakf/go-bridges/redis"
+	bridge "github.com/ridwanakf/bridges"
+	"github.com/ridwanakf/bridges/redis"
 	"github.com/ridwanakf/url-shortener-service/internal/app/config"
 )
 

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	bridge "github.com/ridwanakf/go-bridges"
+	bridge "github.com/ridwanakf/bridges"
 	"github.com/ridwanakf/url-shortener-service/internal/entity"
 )
 

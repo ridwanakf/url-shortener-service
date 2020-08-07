@@ -23,7 +23,7 @@ func NewShortenerService(app *app.UrlShortenerApp) *ShortenerService {
 }
 
 func (s *ShortenerService) IndexHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "index", nil)
+	return c.File("./web/build/index.html")
 }
 
 func (s *ShortenerService) RedirectHandler(c echo.Context) error {

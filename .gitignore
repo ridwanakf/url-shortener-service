@@ -6,7 +6,7 @@
 *.dylib
 
 # Ignore Golang's Compiled binaries
-/url-shortener-service
+bin/
 
 # Test binary, built with `go test -c`
 *.test

@@ -1,7 +1,7 @@
 # go build command
 build:
 	@echo " >> building binaries"
-	@go build -v -o url-shortener-service cmd/*.go
+	@go build -v -o bin/rest cmd/rest/*.go
 
 # go run command
 run: build

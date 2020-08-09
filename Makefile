@@ -5,7 +5,7 @@ build:
 
 # go run command
 run: build
-	./url-shortener-service
+	./bin/rest
 
 # run all go:generate commands (eg. Mock files generator)
 generate:
